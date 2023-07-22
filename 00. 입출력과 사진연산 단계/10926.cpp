@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+
+int main(void)
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	string id;
+	cin >> id;
+
+	cout << id << "??!\n";
+
+	return 0;
+}
