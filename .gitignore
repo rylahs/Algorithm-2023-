@@ -2,3 +2,10 @@
 BaaarkingDogAlgorithm.vcxproj
 BaaarkingDogAlgorithm.vcxproj.filters
 BaaarkingDogAlgorithm.vcxproj.user
+x64/Debug/BaaarkingDogAlgorithm.ilk
+*.obj
+*.tlog
+*.idb
+*.pdb
+*.log
+*.recipe
