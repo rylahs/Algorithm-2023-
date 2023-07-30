@@ -3,14 +3,12 @@ using namespace std;
 #define X first
 #define Y second
 
-string board[1002];
-int distf[1002][1002];
-int distj[1002][1002];
+string maze[1002];
+int distF[1002][1002];
+int distH[1002][1002];
 
-
-
-int dx[4] = { -1, 0, 1, 0 };
-int dy[4] = { 0, -1, 0, 1 };
+int dx[4] = { 1, 0, -1, 0 };
+int dy[4] = { 0, 1, 0, -1 };
 
 int main(void)
 {
@@ -20,81 +18,85 @@ int main(void)
 	int n, m;
 	cin >> n >> m;
 
-	for (int i = 0; i < n; i++) // Input Data 
-		cin >> board[i];
+	for (int i = 0; i < n; i++)
+		cin >> maze[i];
 
-	queue<pair<int, int>> Q1; // Fire Queue
-	queue<pair<int, int>> Q2; // Jihoon Queue
+	queue<pair<int, int>> FQ;
+	queue<pair<int, int>> HQ;
+
+
 	for (int i = 0; i < n; i++)
 	{
-		fill(distf[i], distf[i] + m, -1); // Init Fire Array
-		fill(distj[i], distj[i] + m, -1); // Init Jihoon Array
+		fill(distF[i], distF[i] + m, -1);
+		fill(distH[i], distH[i] + m, -1);
+
 		for (int j = 0; j < m; j++)
 		{
-			if (board[i][j] == 'F') // Find Fire
+			if (maze[i][j] == 'F')
 			{
-				distf[i][j] = 0;
-				Q1.push({ i, j }); // Push Q1
+				distF[i][j] = 0;
+				FQ.push({ i, j });
 			}
-			if (board[i][j] == 'J') // Find Jihoon
+
+			if (maze[i][j] == 'J')
 			{
-				distj[i][j] = 0;
-				Q2.push({ i, j }); // Push Q2
+				distH[i][j] = 0;
+				HQ.push({ i, j });
 			}
 		}
 	}
 
-	// Fire BFS
-	while (!Q1.empty())
+
+	while (!FQ.empty())
 	{
-		pair<int, int> cur = Q1.front();
-		Q1.pop();
+		pair<int, int> cur = FQ.front();
+		FQ.pop();
 
 		for (int dir = 0; dir < 4; dir++)
 		{
 			int nx = cur.X + dx[dir];
 			int ny = cur.Y + dy[dir];
 
-			if (nx < 0 || nx >= n || ny < 0 || ny >= m) // Out of Area 
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
 				continue;
 
-			if (board[nx][ny] == '#' || distf[nx][ny] >= 0) // Wall or already visited
+			if (maze[nx][ny] == '#' || distF[nx][ny] >= 0)
 				continue;
 
-			distf[nx][ny] = distf[cur.X][cur.Y] + 1;
-			Q1.push({ nx, ny }); // next Push
+			distF[nx][ny] = distF[cur.X][cur.Y] + 1;
+			FQ.push({ nx, ny });
 		}
 	}
 
-	// Jihoon BFS
-	while (!Q2.empty())
+	while (!HQ.empty())
 	{
-		pair<int, int> cur = Q2.front();
-		Q2.pop();
+		pair<int, int> cur = HQ.front();
+		HQ.pop();
 
 		for (int dir = 0; dir < 4; dir++)
 		{
 			int nx = cur.X + dx[dir];
 			int ny = cur.Y + dy[dir];
 
-			if (nx < 0 || nx >= n || ny < 0 || ny >= m) // Out of Area == Escape 
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
 			{
-				cout << distj[cur.X][cur.Y] + 1 << "\n"; // Last Value + 1
+				cout << distH[cur.X][cur.Y] + 1 << "\n";
 				return 0;
 			}
 
-			if (distj[nx][ny] >= 0 || board[nx][ny] == '#') // Already Visited or Meet Wall
+			if (distH[nx][ny] >= 0 || maze[nx][ny] == '#')
 				continue;
 
-			if (distf[nx][ny] != -1 && distf[nx][ny] <= distj[cur.X][cur.Y] + 1) // not wall , fire < jihoon (not go)
+			if (distF[nx][ny] != -1 && distF[nx][ny] <= distH[cur.X][cur.Y] + 1)
 				continue;
 
-			distj[nx][ny] = distj[cur.X][cur.Y] + 1;
-			Q2.push({ nx, ny }); // Push
+			distH[nx][ny] = distH[cur.X][cur.Y] + 1;
+			HQ.push({ nx, ny });
 		}
 	}
 
+	cout << "IMPOSSIBLE\n";
 
-	cout << "IMPOSSIBLE\n"; // Reach this sentence no Escape
 	return 0;
+
 }
