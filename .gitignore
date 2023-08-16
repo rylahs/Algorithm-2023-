@@ -10,3 +10,11 @@ x64/Debug/BaaarkingDogAlgorithm.ilk
 *.log
 *.recipe
 *.enc
+.vs/Algorithm/v17/Browse.VC.db
+*.vsidx
+.vs/Algorithm/v17/.suo
+*.db
+*.ipch
+*.filters
+*.ilk
+x64/Debug/Algorithm.exe
